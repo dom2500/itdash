@@ -3,46 +3,208 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Geräte-Übersicht</title>
+<title>Netzwerk-Übersicht</title>
+<meta name="color-scheme" content="light">
 <style>
-  body{font-family:system-ui,Arial;margin:18px}
-  input{padding:8px;width:100%;max-width:520px;margin-bottom:12px}
-  table{border-collapse:collapse;width:100%;max-width:1100px}
-  th,td{border:1px solid #ddd;padding:8px;text-align:left}
-  th{background:#f4f4f4}
-  tr:hover{background:#fbfbfb}
-  .note{color:#666;font-size:0.9em}
-  a { color: #0066cc; text-decoration: none; }
+  :root{
+    --bg: #ffffff;
+    --text: #0f1226;
+    --muted: #6b6f8b;
+    --card: #ffffff;
+    --border: #e8e8f3;
+    --shadow: 0 10px 30px rgba(17, 23, 41, .08);
+    --grad1: #6e33ff;   /* Lila */
+    --grad2: #2ab3ff;   /* Blau */
+    --link: #5a3df3;
+    --link-hover: #3a29d1;
+    --chip-bg: #f1efff;
+    --chip-tx: #3b2ac6;
+    --row-hover: #fafaff;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Liberation Sans", sans-serif;
+    color:var(--text);
+    background: var(--bg);
+  }
+
+  /* Header mit Farbverlauf */
+  .hero{
+    background: linear-gradient(135deg, var(--grad1), var(--grad2));
+    color:#fff;
+    padding:48px 22px;
+  }
+  .hero .wrap{max-width:1080px;margin:0 auto}
+  .title{
+    margin:0 0 8px 0;
+    font-size: clamp(22px, 3vw, 32px);
+    letter-spacing:.2px;
+    font-weight:800;
+  }
+  .subtitle{
+    margin:0;
+    opacity:.95;
+    font-size: clamp(14px, 1.7vw, 16px);
+  }
+
+  /* Card-Container */
+  .container{
+    max-width:1080px;
+    margin:-28px auto 40px;
+    padding:0 22px;
+  }
+  .card{
+    background: var(--card);
+    border:1px solid var(--border);
+    border-radius:16px;
+    box-shadow: var(--shadow);
+    padding:18px;
+  }
+
+  /* Suche */
+  .search{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:10px 12px;
+    background:#fff;
+    box-shadow: inset 0 1px 0 rgba(17,23,41,.03);
+    margin-bottom:14px;
+  }
+  .search svg{flex:0 0 20px;opacity:.55}
+  .search input{
+    flex:1 1 auto;
+    border:none;
+    outline:none;
+    font-size:15px;
+    color:var(--text);
+  }
+  .hint{color:var(--muted); font-size:13px; margin:0 0 14px 4px}
+
+  /* Tabelle */
+  .table-wrap{overflow:auto;border-radius:12px;border:1px solid var(--border)}
+  table{width:100%;border-collapse:separate;border-spacing:0;background:#fff}
+  thead th{
+    position:sticky; top:0; z-index:1;
+    background: #f7f8ff;
+    text-align:left; font-weight:700; font-size:14px; color:#2d2f45;
+    border-bottom:1px solid var(--border);
+    padding:12px 14px;
+  }
+  tbody td{
+    font-size:14px; color:#151735;
+    padding:12px 14px; border-bottom:1px solid var(--border);
+    vertical-align:middle;
+  }
+  tbody tr:hover{background:var(--row-hover)}
+  tbody tr:last-child td{border-bottom:none}
+
+  /* Links & Chips */
+  a{color:var(--link); text-decoration:none}
+  a:hover{color:var(--link-hover); text-decoration:underline}
+  .chip{
+    display:inline-block; padding:6px 10px; border-radius:999px;
+    background:var(--chip-bg); color:var(--chip-tx); font-weight:700; font-size:12px;
+    border:1px solid #e3e0ff;
+  }
+  .note{color:var(--muted); font-size:13px}
+
+  /* Footer */
+  .footer{
+    max-width:1080px; margin:24px auto 40px; padding:0 22px;
+    color:var(--muted); font-size:12px; text-align:center;
+  }
+
+  /* Kleinbildschirm-Optimierungen */
+  @media (max-width: 640px){
+    .search{padding:10px}
+    thead th, tbody td{padding:10px}
+    .subtitle{line-height:1.35}
+  }
 </style>
 </head>
 <body>
-<h2>Netzwerk-Übersicht — Schnellzugriff</h2>
-<p>Suche nach Name, IP oder Hostname:</p>
-<input id="q" placeholder="z.B. Drucker, 192.168.1.20, fw.example.local">
 
-<table id="tbl">
-  <thead><tr><th>Name</th><th>IP</th><th>DNS / Host</th><th>Service</th><th>Notiz</th></tr></thead>
-  <tbody>
-    <!-- ROWS_WILL_BE_INSERTED_HERE -->
-  </tbody>
-</table>
+  <!-- HERO -->
+  <header class="hero">
+    <div class="wrap">
+      <h1 class="title">Netzwerk-Übersicht — Schnellzugriff</h1>
+      <p class="subtitle">Suche, filtere und öffne die Web-Oberflächen deiner Geräte mit einem Klick.</p>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <main class="container">
+    <section class="card">
+      <!-- Suche -->
+      <div class="search">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M21 21l-4.2-4.2M17 10.5A6.5 6.5 0 1 1 4 10.5a6.5 6.5 0 0 1 13 0Z"
+                stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+        <input id="q" placeholder="z. B. Drucker, 192.168.1.20, fw.example.local">
+      </div>
+      <p class="hint">Tipp: Du kannst nach <strong>Namen</strong>, <strong>IP</strong>, <strong>Host</strong> oder <strong>Port</strong> suchen.</p>
+
+      <!-- Tabelle -->
+      <div class="table-wrap">
+        <table id="tbl">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>IP</th>
+              <th>DNS / Host</th>
+              <th>Service</th>
+              <th>Notiz</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- ROWS_WILL_BE_INSERTED_HERE -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <div class="footer">
+    <span>Powered by GitHub Pages • Build aus <code>devices.csv</code></span>
+  </div>
 
 <script>
-const q = document.getElementById('q');
-q.addEventListener('input', ()=> {
-  const s = q.value.trim().toLowerCase();
-  document.querySelectorAll('#tbl tbody tr').forEach(tr=>{
-    tr.style.display = [...tr.querySelectorAll('td')].map(td=>td.textContent.toLowerCase()).join(' ').includes(s) ? '' : 'none';
+  // Live-Filter
+  const q = document.getElementById('q');
+  q.addEventListener('input', ()=> {
+    const s = q.value.trim().toLowerCase();
+    document.querySelectorAll('#tbl tbody tr').forEach(tr=>{
+      const text = [...tr.querySelectorAll('td')].map(td=>td.textContent.toLowerCase()).join(' ');
+      tr.style.display = text.includes(s) ? '' : 'none';
+    });
   });
-});
 
-// ensure links open in new tab
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('#tbl tbody a').forEach(a=>{
-    a.setAttribute('target','_blank');
-    a.setAttribute('rel','noopener');
+  // Links: neuer Tab + schöner Chip für den Service
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('#tbl tbody a').forEach(a=>{
+      a.setAttribute('target','_blank');
+      a.setAttribute('rel','noopener');
+    });
+
+    // Service-Spalte (3.) als Chip stylen, ohne URLs zu verändern
+    document.querySelectorAll('#tbl tbody tr').forEach(tr=>{
+      const serviceCell = tr.children[3];
+      if(!serviceCell) return;
+      const link = serviceCell.querySelector('a');
+      if(link){
+        const label = link.textContent.trim();
+        link.classList.add('chip');
+        link.style.textDecoration = 'none';
+        link.textContent = label;
+      }
+    });
   });
-});
 </script>
 </body>
 </html>
