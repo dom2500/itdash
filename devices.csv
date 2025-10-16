@@ -4,5 +4,5 @@ Drucker,192.168.10.20,printer.local,http,631,Netzwerkdrucker
 Kantinen-Kasse,192.168.10.5,kasse.local,http,80,Web-UI für Kasse
 Fileserver,192.168.10.30,files.example.local,https,443,Admin-Panel
 NAS-Backup,192.168.10.40,,https,8443,Webkonsole
-
+  
   

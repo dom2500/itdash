@@ -1,7 +1,8 @@
 name: Build & Deploy (Pages)
+
 on:
   push:
-    branches: [ main ]
+    branches: [ main, master ]   # egal ob dein Branch main oder master heißt
   workflow_dispatch:
 
 permissions:
@@ -18,15 +19,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.x"
+
       - name: Build site from CSV
         run: |
+          ls -la
           python build.py
+          echo "---- nach Build ----"
+          ls -la
           mkdir -p dist
           cp index.html dist/
           # Optional: weitere Assets kopieren, z.B. cp -r assets dist/
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
