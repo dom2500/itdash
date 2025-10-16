@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Geräte-Übersicht</title>
+<style>
+  body{font-family:system-ui,Arial;margin:18px}
+  input{padding:8px;width:100%;max-width:520px;margin-bottom:12px}
+  table{border-collapse:collapse;width:100%;max-width:1100px}
+  th,td{border:1px solid #ddd;padding:8px;text-align:left}
+  th{background:#f4f4f4}
+  tr:hover{background:#fbfbfb}
+  .note{color:#666;font-size:0.9em}
+  a { color: #0066cc; text-decoration: none; }
+</style>
+</head>
+<body>
+<h2>Netzwerk-Übersicht — Schnellzugriff</h2>
+<p>Suche nach Name, IP oder Hostname:</p>
+<input id="q" placeholder="z.B. Drucker, 192.168.1.20, fw.example.local">
+
+<table id="tbl">
+  <thead><tr><th>Name</th><th>IP</th><th>DNS / Host</th><th>Service</th><th>Notiz</th></tr></thead>
+  <tbody>
+    <!-- ROWS_WILL_BE_INSERTED_HERE -->
+  </tbody>
+</table>
+
+<script>
+const q = document.getElementById('q');
+q.addEventListener('input', ()=> {
+  const s = q.value.trim().toLowerCase();
+  document.querySelectorAll('#tbl tbody tr').forEach(tr=>{
+    tr.style.display = [...tr.querySelectorAll('td')].map(td=>td.textContent.toLowerCase()).join(' ').includes(s) ? '' : 'none';
+  });
+});
+
+// ensure links open in new tab
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('#tbl tbody a').forEach(a=>{
+    a.setAttribute('target','_blank');
+    a.setAttribute('rel','noopener');
+  });
+});
+</script>
+</body>
+</html>
